@@ -13,7 +13,7 @@ namespace Xandar
 		{
 			InitializeComponent();
 
-			MainPage = new Xandar.MainPage();
+            MainPage = new Xandar.MainPage();
 		}
 
 		protected override void OnStart ()

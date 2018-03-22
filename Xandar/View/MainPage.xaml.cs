@@ -6,20 +6,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+
 using Xandar.Model;
 using Xandar.Service;
+using Xandar.CustomView;
+using XLabs.Serialization.JsonNET;
 
 namespace Xandar
 {
     public partial class MainPage : ContentPage
 	{
         private const string START_PAGE = "http://www.google.com";
+
+        private readonly JsonSerializer _serializer = new JsonSerializer();
+
         public ObservableCollection<View> PageCollection;
         private bool isListOfLoadedPagesOpen;
         private int indexOfCurrentPage = 0;
-
-        //Events, Gesture's
-        TapGestureRecognizer pageTap = new TapGestureRecognizer();
 
         public MainPage()
 		{
@@ -32,19 +35,22 @@ namespace Xandar
         {
             PageCollection = new ObservableCollection<View>()
             {
-                new XWebView()
+                new XandarWebView(_serializer)
                 {
                     Source = START_PAGE,
-                    Index = 0,
                     Scale = 1,
+                    BackgroundColor = Color.White,
                     InputTransparent = false,
                     WidthRequest = 400,
                     HeightRequest = 600
                 }
             };
 
-            PageCollection[indexOfCurrentPage].Unfocused += MainPage_Unfocused;
-            PageCollection[indexOfCurrentPage].Focused += MainPage_Focused;
+            (PageCollection[indexOfCurrentPage] as XandarWebView).Initialize();
+
+            (PageCollection[indexOfCurrentPage] as XandarWebView).Clicked += WebView_Clicked;
+            //PageCollection[indexOfCurrentPage].Unfocused += MainPage_Unfocused;
+            //PageCollection[indexOfCurrentPage].Focused += MainPage_Focused;
 
             ListViewWebPages.SetBinding(ListView.ItemsSourceProperty, "PageCollection");
             ListViewWebPages.ItemsSource = PageCollection;
@@ -52,12 +58,13 @@ namespace Xandar
             UrlEntry.Text = START_PAGE;
         }
 
-
+        private void WebView_Clicked(object sender, ClickEventArgs e)
+        {
+            DisplayAlert("WebView Clicked", e.Element, "Dismiss");
+        }
 
         private void InitializeEvents()
         {
-            pageTap.NumberOfTapsRequired = 2;
-            pageTap.Tapped += PageTap_Tapped;
             //CurrentWebView.Navigating += CurrentWebView_OnNavigating;
             //CurrentWebView.Navigated += CurrentWebView_OnEndNavigating;
         }
@@ -204,10 +211,10 @@ namespace Xandar
 
         private void CreateNewPage()
         {
-            var page = new XWebView()
+            var page = new XandarWebView(_serializer)
             {
                 Source = START_PAGE,
-                Index = 0,
+                BackgroundColor = Color.White,
                 Scale = 0.5,
                 InputTransparent = true,
                 WidthRequest = 400,
