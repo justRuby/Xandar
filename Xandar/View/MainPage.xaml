@@ -2,14 +2,12 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Xandar"
-             xmlns:xweb="clr-namespace:Xandar.Model"
-             xmlns:controls="clr-namespace:CarouselView.FormsPlugin.Abstractions;assembly=CarouselView.FormsPlugin.Abstractions"
              x:Class="Xandar.MainPage"
-             BackgroundColor="LightGray">
+             BackgroundColor="White">
 
     <StackLayout Spacing="0">
         <!--MainPage-->
-        <!--<Grid x:Name="MainPageGrid" 
+        <Grid x:Name="MainPageGrid" 
               IsVisible="True" 
               HorizontalOptions="CenterAndExpand">
             <Grid.RowDefinitions>
@@ -115,23 +113,23 @@
 
             </Grid>
 
-        </Grid>-->
+        </Grid>
 
         <!--Current WebView-->
         <StackLayout x:Name="WebClientStackLayout" 
                      Spacing="0"
-                     IsVisible="True">
+                     IsVisible="False">
 
             <Grid VerticalOptions="FillAndExpand"
                   HorizontalOptions="FillAndExpand">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
-                    <RowDefinition Height="2000*"/>
+                    <RowDefinition Height="600*"/>
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2000*"/>
+                    <ColumnDefinition Width="400*"/>
                 </Grid.ColumnDefinitions>
 
                 <Grid Grid.Row="0"
@@ -147,56 +145,28 @@
 
                     <Entry Grid.Row="0"
                        Grid.Column="0"
+                       HeightRequest="20"
                        x:Name="UrlEntry"
+                       Unfocused="UrlEntry_Unfocused"
                        TextColor="DimGray"/>
 
                     <Button Grid.Row="0"
                         Grid.Column="1"
                         x:Name="UpdatePageButton"
+                        Clicked="UpdatePageButton_Clicked"
                         BackgroundColor="Gray"/>
 
                 </Grid>
 
-                <controls:CarouselViewControl x:Name="ListViewWebPages"
-                                              Grid.Column="0"
-                                              Grid.Row="1"
-                                              Orientation="Horizontal"
-                                              Position="0"
-                                              IsSwipeEnabled="False"
-                                              ShowArrows="False"
-                                              ArrowsTransparency="0.5"
-                                              Scrolled="Handle_Scrolled">
+                <StackLayout x:Name="CurrentPage"
+                             Grid.Column="0"
+                             Grid.Row="1">
 
-                </controls:CarouselViewControl>
+                </StackLayout>
 
             </Grid>
-            
+
         </StackLayout>
-
-
-        <!--List Of WebView-->
-
-        <!--<ListView x:Name="ListViewImage" 
-                      ItemsSource="{Binding ImageCollection}" 
-                      HasUnevenRows="True" 
-                      SeparatorColor="Transparent"
-                      ItemTapped="">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <ViewCell.View>
-                            <WebView VerticalOptions="FillAndExpand"
-                                     HorizontalOptions="FillAndExpand">
-                            </WebView>
-                        </ViewCell.View>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-
-        <WebView x:Name="WebView">
-            
-        </WebView>-->
 
         <!--LoadingIndicator-->
         <AbsoluteLayout x:Name="IndicatorOfLoadingPageProgressBar"
@@ -226,7 +196,6 @@
                     Grid.Row="0"
                     BackgroundColor="DimGray"
                     x:Name="CreateNewPageButton"
-                    Clicked="CreateNewPageButton_Clicked"
                     IsVisible="True">
                 </Button>
 
@@ -241,7 +210,6 @@
                     Grid.Row="0"
                     x:Name="UseCurrentPage"
                     BackgroundColor="DimGray"
-                    Clicked="UseCurrentPage_Clicked"
                     IsVisible="True">
                 </Button>
 
@@ -266,20 +234,14 @@
                 <Button Grid.Column="0"
                         Grid.Row="0"
                         BackgroundColor="DimGray"
-                        x:Name="GoToBeforePageButton"
+                        Clicked="GoToBeforePage_Clicked"
                         IsVisible="True">
-                </Button>
-                <Button Grid.Column="0"
-                        Grid.Row="0"
-                        BackgroundColor="DimGray"
-                        x:Name="SearchOrGoToURLButton"
-                        IsVisible="False">
                 </Button>
 
                 <Button Grid.Column="1"
                         Grid.Row="0"
                         BackgroundColor="DimGray"
-                        x:Name="GoToNextPageButton"
+                        Clicked="GoToNextPage_Clicked"
                         IsVisible="True">
                 </Button>
                 <Button Grid.Column="1"
@@ -298,8 +260,7 @@
                 <Button Grid.Column="3"
                         Grid.Row="0"
                         BackgroundColor="DimGray"
-                        x:Name="GetListOfLoadedPagesButton"
-                        Clicked="GetListOfLoadedPagesButton_Clicked">
+                        x:Name="GetListOfLoadedPagesButton"> 
 
                 </Button>
                 <Button Grid.Column="4"
