@@ -2,14 +2,20 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Xandar"
+             xmlns:xancontrols="clr-namespace:Xandar.CustomControl"
+             xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:ffTransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+             xmlns:custom="clr-namespace:Xandar.CustomControl"
              x:Class="Xandar.MainPage"
              BackgroundColor="White">
 
-    <StackLayout Spacing="0">
+    <AbsoluteLayout>
+
         <!--MainPage-->
         <Grid x:Name="MainPageGrid" 
               IsVisible="True" 
-              HorizontalOptions="CenterAndExpand">
+              AbsoluteLayout.LayoutBounds=".5,1,AutoSize,AutoSize"
+              AbsoluteLayout.LayoutFlags="PositionProportional">
             <Grid.RowDefinitions>
                 <RowDefinition Height="300*"/>
                 <RowDefinition Height="50"/>
@@ -29,22 +35,25 @@
             </Label>
 
             <Grid Grid.Row="1"
-                  Grid.Column="0">
+                  Grid.Column="0"
+                  HorizontalOptions="FillAndExpand">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200*"/>
+                    <ColumnDefinition Width="AUTO"/>
                     <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
-                
+
                 <Entry Grid.Row="0"
                        Grid.Column="0"
                        x:Name="SearchOrUrlEntry"
+                       MinimumWidthRequest="200"
                        Placeholder="Введите поисковый запрос или URL"
                        PlaceholderColor="LightGray"
+                       BackgroundColor="Transparent"
                        TextColor="DimGray">
                 </Entry>
 
@@ -56,63 +65,11 @@
                         FontSize="Default"
                         TextColor="DimGray"
                         Text="Go">
-                    
-                </Button>
-
-            </Grid>
-
-
-            <Grid Grid.Row="2"
-                  Grid.Column="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="100"/>
-                    <RowDefinition Height="100"/>
-                </Grid.RowDefinitions>
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="100"/>
-                </Grid.ColumnDefinitions>
-
-                <Button Grid.Row="0"
-                        Grid.Column="0"
-                        BackgroundColor="LightGray">
-                    
-                </Button>
-
-                <Button Grid.Row="0"
-                        Grid.Column="1"
-                        BackgroundColor="LightGray">
-
-                </Button>
-
-                <Button Grid.Row="0"
-                        Grid.Column="2"
-                        BackgroundColor="LightGray">
-
-                </Button>
-
-                <Button Grid.Row="1"
-                        Grid.Column="0"
-                        BackgroundColor="LightGray">
-
-                </Button>
-
-                <Button Grid.Row="1"
-                        Grid.Column="1"
-                        BackgroundColor="LightGray">
-
-                </Button>
-
-                <Button Grid.Row="1"
-                        Grid.Column="2"
-                        BackgroundColor="LightGray">
 
                 </Button>
 
             </Grid>
-
+            
         </Grid>
 
         <!--Current WebView-->
@@ -121,7 +78,10 @@
                      IsVisible="False">
 
             <Grid VerticalOptions="FillAndExpand"
-                  HorizontalOptions="FillAndExpand">
+                  HorizontalOptions="FillAndExpand"                   
+                  AbsoluteLayout.LayoutBounds=".5,.5,AutoSize,AutoSize"
+                  AbsoluteLayout.LayoutFlags="PositionProportional">
+
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
@@ -143,18 +103,22 @@
                         <ColumnDefinition Width="40"/>
                     </Grid.ColumnDefinitions>
 
-                    <Entry Grid.Row="0"
-                       Grid.Column="0"
-                       HeightRequest="20"
-                       x:Name="UrlEntry"
-                       Unfocused="UrlEntry_Unfocused"
-                       TextColor="DimGray"/>
+                    <custom:CustomEntry Grid.Row="0"
+                                        Grid.Column="0"
+                                        HeightRequest="20"
+                                        x:Name="UrlEntry"
+                                        Keyboard="Url"
+                                        Unfocused="UrlEntry_Unfocused"
+                                        TextColor="DimGray"/>
 
-                    <Button Grid.Row="0"
-                        Grid.Column="1"
-                        x:Name="UpdatePageButton"
-                        Clicked="UpdatePageButton_Clicked"
-                        BackgroundColor="Gray"/>
+                    <ff:CachedImage Grid.Row="0"
+                                    Grid.Column="1"
+                                    x:Name="UpdatePageButton"
+                                    Margin="8"
+                                    Aspect="AspectFit"
+                                    CacheType="All"
+                                    Source="update.png"
+                                    IsVisible="True"/>
 
                 </Grid>
 
@@ -168,109 +132,334 @@
 
         </StackLayout>
 
-        <!--LoadingIndicator-->
-        <AbsoluteLayout x:Name="IndicatorOfLoadingPageProgressBar"
-                        IsVisible="False">
-            <ProgressBar AbsoluteLayout.LayoutBounds=".5,.8,50,50"
-                         AbsoluteLayout.LayoutFlags="PositionProportional">
-            </ProgressBar>
-        </AbsoluteLayout>
+        <!--Background-->
+        <BoxView x:Name="BackgroundBlackTransparent" 
+                 AbsoluteLayout.LayoutBounds="1,1,1,1"
+                 AbsoluteLayout.LayoutFlags="All"
+                 IsVisible="False">
+        </BoxView>
+        
+        <!--Settings-->
+        <Frame BackgroundColor="White"
+               Padding="0"
+               HasShadow="true"
+               CornerRadius="5"
+               x:Name="AppSettings"
+               IsVisible="False"
+               AbsoluteLayout.LayoutBounds=".5,.85,300,AutoSize"
+               AbsoluteLayout.LayoutFlags="PositionProportional">
 
-        <StackLayout VerticalOptions="EndAndExpand">
-            <!--Action Bar When List Of Pages Open-->
-            <Grid x:Name="ActionBarWhenListOfPagesOpen" 
-                  BackgroundColor="LightGray"
-                  HorizontalOptions="CenterAndExpand"
-                  MinimumHeightRequest="50"
-                  IsVisible="False">
+            <Grid HorizontalOptions="Center" 
+                  Padding="20,20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
+
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="0"
-                    Grid.Row="0"
-                    BackgroundColor="DimGray"
-                    x:Name="CreateNewPageButton"
-                    IsVisible="True">
-                </Button>
+                <Frame Grid.Row="0"
+                       Grid.Column="0"
+                       Padding="0"
+                       HasShadow="True"
+                       CornerRadius="12">
 
-                <Button Grid.Column="1"
-                    Grid.Row="0"
-                    x:Name="DeleteCurrentPage"
-                    BackgroundColor="DimGray"
-                    IsVisible="True">
-                </Button>
+                    <AbsoluteLayout VerticalOptions="Fill"
+                                    HorizontalOptions="Fill">
 
-                <Button Grid.Column="2"
-                    Grid.Row="0"
-                    x:Name="UseCurrentPage"
-                    BackgroundColor="DimGray"
-                    IsVisible="True">
-                </Button>
+                        <ff:CachedImage Source="download.png"
+                                        CacheType="All"
+                                        Aspect="AspectFit"
+                                        AbsoluteLayout.LayoutBounds="0.5,0.4,30,30"
+                                        AbsoluteLayout.LayoutFlags="PositionProportional"/>
+
+                        <Label Text="Загрузки"
+                               InputTransparent="True"
+                               HorizontalTextAlignment="Center"
+                               AbsoluteLayout.LayoutBounds="0.5,1.3,50,20"
+                               AbsoluteLayout.LayoutFlags="PositionProportional"
+                               FontSize="Micro"/>
+
+                    </AbsoluteLayout>
+                    
+
+
+                </Frame>
+
+
+
+                <Frame Grid.Row="0"
+                       Grid.Column="1"
+                       HasShadow="True"
+                       Padding="0"
+                       x:Name="OpenHistoryPage"
+                       CornerRadius="12">
+
+                    <AbsoluteLayout VerticalOptions="Fill"
+                                    HorizontalOptions="Fill">
+
+                        <ff:CachedImage Source="history.png"
+                                        CacheType="All"
+                                        Aspect="AspectFit"
+                                        InputTransparent="True"
+                                        AbsoluteLayout.LayoutBounds="0.5,0.4,25,25"
+                                        AbsoluteLayout.LayoutFlags="PositionProportional"/>
+
+                        <Label Text="История"
+                               InputTransparent="True"
+                               HorizontalTextAlignment="Center"
+                               AbsoluteLayout.LayoutBounds="0.5,1.3,50,20"
+                               AbsoluteLayout.LayoutFlags="PositionProportional"
+                               FontSize="Micro"/>
+
+                    </AbsoluteLayout>
+
+                </Frame>
+
+                <Frame Grid.Row="0"
+                       Grid.Column="2"
+                       HasShadow="True"
+                       Padding="0"
+                       CornerRadius="15">
+
+                    <AbsoluteLayout VerticalOptions="Fill"
+                                    HorizontalOptions="Fill">
+
+                        <ff:CachedImage Source="settings.png"
+                                        CacheType="All"
+                                        Aspect="AspectFit"
+                                        AbsoluteLayout.LayoutBounds="0.5,0.4,25,25"
+                                        AbsoluteLayout.LayoutFlags="PositionProportional"/>
+
+                        <Label Text="Настройки"
+                               InputTransparent="True"
+                               HorizontalTextAlignment="Center"
+                               AbsoluteLayout.LayoutBounds="0.5,1.3,50,20"
+                               AbsoluteLayout.LayoutFlags="PositionProportional"
+                               FontSize="Micro"/>
+
+                    </AbsoluteLayout>
+
+                </Frame>
+
+                <Frame Grid.Row="1"
+                       Grid.Column="0"
+                       HasShadow="True"
+                       Padding="0"
+                       CornerRadius="15">
+
+                    <AbsoluteLayout VerticalOptions="Fill"
+                                    HorizontalOptions="Fill">
+
+                        <ff:CachedImage Source="favorite.png"
+                                        CacheType="All"
+                                        Aspect="AspectFit"
+                                        AbsoluteLayout.LayoutBounds="0.5,0.4,25,25"
+                                        AbsoluteLayout.LayoutFlags="PositionProportional"/>
+
+                        <Label Text="Доб."
+                               InputTransparent="True"
+                               HorizontalTextAlignment="Center"
+                               AbsoluteLayout.LayoutBounds="0.5,1.1,50,20"
+                               AbsoluteLayout.LayoutFlags="PositionProportional"
+                               FontSize="Micro"/>
+                        
+                        <Label Text="закладку"
+                               InputTransparent="True"
+                               HorizontalTextAlignment="Center"
+                               AbsoluteLayout.LayoutBounds="0.5,1.35,50,20"
+                               AbsoluteLayout.LayoutFlags="PositionProportional"
+                               FontSize="Micro"/>
+
+                    </AbsoluteLayout>
+
+                </Frame>
+
+                <Frame Grid.Row="1"
+                       Grid.Column="1"
+                       HasShadow="True"
+                       Padding="0"
+                       x:Name="TurnModePrivacy"
+                       CornerRadius="15">
+
+                    <AbsoluteLayout VerticalOptions="Fill"
+                                    HorizontalOptions="Fill">
+
+                        <ff:CachedImage BackgroundColor="LightGray"
+                                        CacheType="All"
+                                        Aspect="AspectFit"
+                                        AbsoluteLayout.LayoutBounds="0.5,0.4,25,25"
+                                        AbsoluteLayout.LayoutFlags="PositionProportional"/>
+
+                        <Label Text="Приватность"
+                               InputTransparent="True"
+                               HorizontalTextAlignment="Center"
+                               AbsoluteLayout.LayoutBounds="0.5,1.3,50,20"
+                               AbsoluteLayout.LayoutFlags="PositionProportional"
+                               FontSize="Micro"/>
+
+                    </AbsoluteLayout>
+
+                </Frame>
+
+                <Frame Grid.Row="1"
+                       Grid.Column="2"
+                       HasShadow="True"
+                       Padding="0"
+                       x:Name="TurnModeMobileOrDesktop"
+                       CornerRadius="15">
+
+                    <AbsoluteLayout VerticalOptions="Fill"
+                                    HorizontalOptions="Fill">
+
+                        <ff:CachedImage BackgroundColor="LightGray"
+                                        CacheType="All"
+                                        Aspect="AspectFit"
+                                        AbsoluteLayout.LayoutBounds="0.5,0.4,25,25"
+                                        AbsoluteLayout.LayoutFlags="PositionProportional"/>
+
+                        <Label Text="Полн. режим"
+                               InputTransparent="True"
+                               HorizontalTextAlignment="Center"
+                               AbsoluteLayout.LayoutBounds="0.5,1.3,50,20"
+                               AbsoluteLayout.LayoutFlags="PositionProportional"
+                               FontSize="Micro"/>
+
+                    </AbsoluteLayout>
+
+                </Frame>
 
             </Grid>
 
-            <!--ActionBar-->
-            <Grid x:Name="ActionBar"
-                  HorizontalOptions="CenterAndExpand" 
-                  VerticalOptions="EndAndExpand" 
-                  MinimumHeightRequest="50">
+        </Frame>
+
+        <!--ActionBar-->
+        <Frame BackgroundColor="White"
+               Padding="0"
+               HasShadow="True"
+               OutlineColor="Black"
+               CornerRadius="0"
+               x:Name="ActionBar"
+               AbsoluteLayout.LayoutBounds="1, 1, 1, 50"
+               AbsoluteLayout.LayoutFlags="PositionProportional, WidthProportional">
+
+            <Grid HorizontalOptions="FillAndExpand">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="140"/>
                     <ColumnDefinition Width="50"/>
-                    <ColumnDefinition Width="50"/>
-                    <ColumnDefinition Width="50"/>
-                    <ColumnDefinition Width="50"/>
-                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="140"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="0"
-                        Grid.Row="0"
-                        BackgroundColor="DimGray"
-                        Clicked="GoToBeforePage_Clicked"
-                        IsVisible="True">
-                </Button>
+                <Grid Grid.Column="0"
+                      Grid.Row="0"
+                      HorizontalOptions="Start">
 
-                <Button Grid.Column="1"
-                        Grid.Row="0"
-                        BackgroundColor="DimGray"
-                        Clicked="GoToNextPage_Clicked"
-                        IsVisible="True">
-                </Button>
-                <Button Grid.Column="1"
-                        Grid.Row="0"
-                        BackgroundColor="DimGray"
-                        x:Name="CancelLoadPageButton"
-                        IsVisible="False">
-                </Button>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
 
-                <Button Grid.Column="2"
-                        Grid.Row="0"
-                        BackgroundColor="DimGray"
-                        x:Name="OpenSettingsButton">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
 
-                </Button>
-                <Button Grid.Column="3"
-                        Grid.Row="0"
-                        BackgroundColor="DimGray"
-                        x:Name="GetListOfLoadedPagesButton"> 
+                    <Frame Grid.Column="0"
+                           Grid.Row="0"
+                           Padding="15"
+                           HasShadow="False">
+                        
+                        <ff:CachedImage x:Name="GoToBeforePage"
+                                        Aspect="AspectFit"
+                                        CacheType="All"
+                                        Source="before.png"
+                                        IsVisible="True"/>
+                    </Frame>
 
-                </Button>
-                <Button Grid.Column="4"
-                        Grid.Row="0"
-                        BackgroundColor="DimGray"
-                        x:Name="OpenBookmarksButton">
+                    <Frame Grid.Column="1"
+                           Grid.Row="0"
+                           Padding="15"
+                           HasShadow="False">
 
-                </Button>
+                        <ff:CachedImage x:Name="StopLoadingPage"
+                                        Aspect="AspectFit"
+                                        CacheType="All"
+                                        Source="cancel.png"
+                                        IsVisible="False"/>
+
+                        <ff:CachedImage x:Name="GoToNextPage"
+                                        Aspect="AspectFit"
+                                        CacheType="All"
+                                        Source="next.png"
+                                        IsVisible="True"/>
+
+                    </Frame>
+
+                </Grid>
+
+                <Frame Grid.Column="1"
+                       Grid.Row="0"
+                       Padding="12"
+                       HasShadow="False">
+
+                    <ff:CachedImage x:Name="OpenSettingsButton"
+                                    Aspect="AspectFit"
+                                    CacheType="All"
+                                    Source="menu.png"/>
+
+                </Frame>
+
+                <Grid Grid.Column="2"
+                      Grid.Row="0"
+                      HorizontalOptions="End">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Frame Grid.Column="0"
+                           Grid.Row="0"
+                           Padding="12"
+                           HasShadow="False">
+
+                        <ff:CachedImage x:Name="GetListOfLoadedPagesButton"
+                                        Aspect="AspectFit"
+                                        CacheType="All"
+                                        Source="page.png"/>
+
+                    </Frame>
+
+
+
+                    <Frame Grid.Column="1"
+                           Grid.Row="0"
+                           Padding="12"
+                           HasShadow="False">
+
+                        <ff:CachedImage x:Name="OpenBookmarksButton"
+                                        Aspect="AspectFit"
+                                        CacheType="All"
+                                        Source="bookmarks.png"/>
+
+                    </Frame>
+
+                </Grid>
+                
             </Grid>
-        </StackLayout>
 
-    </StackLayout>
+        </Frame>
+
+    </AbsoluteLayout>
+
 </ContentPage>

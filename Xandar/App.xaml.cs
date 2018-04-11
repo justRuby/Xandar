@@ -4,17 +4,34 @@ using System.Linq;
 using System.Text;
 
 using Xamarin.Forms;
+using Xandar.Data;
+using Xandar.Service;
 
 namespace Xandar
 {
 	public partial class App : Application
 	{
+        private static XandarDatabase _database;
+
 		public App ()
 		{
 			InitializeComponent();
 
             MainPage = new Xandar.MainPage();
 		}
+
+        public static XandarDatabase Database
+        {
+            get
+            {
+                if (_database == null)
+                {
+                    _database = new XandarDatabase(DependencyService.Get<ILocalFileHelper>().GetLocalFilePath("Xandar.db3"));
+                }
+
+                return _database;
+            }
+        }
 
 		protected override void OnStart ()
 		{
@@ -30,5 +47,6 @@ namespace Xandar
 		{
 			// Handle when your app resumes
 		}
+
 	}
 }

@@ -8,6 +8,7 @@ using Android.Widget;
 using Android.OS;
 using FFImageLoading.Forms.Droid;
 using CarouselView.FormsPlugin.Android;
+using XLabs.Forms.Controls;
 
 namespace Xandar.Droid
 {
@@ -22,9 +23,8 @@ namespace Xandar.Droid
             base.OnCreate(bundle);
 
             CachedImageRenderer.Init(true);
-            CarouselViewRenderer.Init();
 
-            //global::Xamarin.Forms.Forms.SetFlags("FastRenderers_Experimental");
+            global::Xamarin.Forms.Forms.SetFlags("FastRenderers_Experimental");
             global::Xamarin.Forms.Forms.Init(this, bundle);
 
             LoadApplication(new App());
