@@ -16,6 +16,12 @@ namespace Xandar.Data
             get;
             set;
         }
+
+        public int IDPage
+        {
+            get;
+            set;
+        }
     }
 }
 

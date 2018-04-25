@@ -4,22 +4,27 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 using Xandar.CustomControl;
 using Xandar.Data;
+using Xandar.Model;
+using Xandar.Service;
 using Xandar.View;
 
 
 namespace Xandar
 {
-    public partial class MainPage : ContentPage
-	{
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class MainPage : CustomContentPage
+    {
         private XandarWebView Page;
+        private MainPageModel BindingModel;
         private string currentURL;
 
         private int _isInitializeLastSessionComplete;
         private bool _isPageOpen;
         private bool _isMainMenuView = true;
-        private bool _isPrivacyMode = true;
+        private bool _isPrivacyMode;
         private bool _stopLoadingPage;
 
         public MainPage()
@@ -31,6 +36,14 @@ namespace Xandar
 
         private void Initialize()
         {
+            BindingModel = new MainPageModel()
+            {
+                FullscreenImagePath = "fullscreen_off.png",
+                PrivacyImagePath = "privacy_off.png"
+            };
+
+            BindingContext = BindingModel;
+
             Page = new XandarWebView()
             {
                 HeightRequest = 600,
@@ -45,6 +58,9 @@ namespace Xandar
 
         private void InitializeEvents()
         {
+
+            OnOrientationChanged += DeviceRotated;
+
             TapGestureRecognizer tapOpenSettings = new TapGestureRecognizer();
             tapOpenSettings.Tapped += OpenSettingsButton_Clicked;
             OpenSettingsButton.GestureRecognizers.Add(tapOpenSettings);
@@ -57,17 +73,17 @@ namespace Xandar
             tapGoToNextPage.Tapped += GoToNextPage_Clicked;
             GoToNextPage.GestureRecognizers.Add(tapGoToNextPage);
 
-            TapGestureRecognizer tapOpenHistoryPage = new TapGestureRecognizer();
-            tapOpenHistoryPage.Tapped += OpenHistoryPage_Clicked;
-            OpenHistoryPage.GestureRecognizers.Add(tapOpenHistoryPage);
+            //TapGestureRecognizer tapOpenHistoryPage = new TapGestureRecognizer();
+            //tapOpenHistoryPage.Tapped += OpenHistoryPage_Clicked;
+            //OpenHistoryPage.GestureRecognizers.Add(tapOpenHistoryPage);
 
-            TapGestureRecognizer tapTurnModePrivacy = new TapGestureRecognizer();
-            tapTurnModePrivacy.Tapped += TurnModePrivacy_Clicked;
-            TurnModePrivacy.GestureRecognizers.Add(tapTurnModePrivacy);
+            //TapGestureRecognizer tapTurnModePrivacy = new TapGestureRecognizer();
+            //tapTurnModePrivacy.Tapped += TurnModePrivacy_Clicked;
+            //TurnModePrivacy.GestureRecognizers.Add(tapTurnModePrivacy);
 
-            TapGestureRecognizer tapTurnModeMobileOrDesktop = new TapGestureRecognizer();
-            tapTurnModeMobileOrDesktop.Tapped += TurnModeMobileOrDesktop_Clicked;
-            TurnModeMobileOrDesktop.GestureRecognizers.Add(tapTurnModeMobileOrDesktop);
+            //TapGestureRecognizer tapTurnModeMobileOrDesktop = new TapGestureRecognizer();
+            //tapTurnModeMobileOrDesktop.Tapped += TurnModeMobileOrDesktop_Clicked;
+            //TurnModeMobileOrDesktop.GestureRecognizers.Add(tapTurnModeMobileOrDesktop);
 
             TapGestureRecognizer tapStopLoadingPage = new TapGestureRecognizer();
             tapStopLoadingPage.Tapped += StopLoadingPage_Clicked;
@@ -76,6 +92,10 @@ namespace Xandar
             TapGestureRecognizer tapUpdatePage = new TapGestureRecognizer();
             tapUpdatePage.Tapped += UpdatePage_Clicked;
             UpdatePageButton.GestureRecognizers.Add(tapUpdatePage);
+
+            TapGestureRecognizer tapOpenBookmarks = new TapGestureRecognizer();
+            tapOpenBookmarks.Tapped += OpenBookmarks_Clicked;
+            OpenBookmarks.GestureRecognizers.Add(tapOpenBookmarks);
         }
 
         private async void InitializeLastSession()
@@ -86,8 +106,26 @@ namespace Xandar
             {
                 CreateWebPage(result[0].OriginalURL);
             }
+        }
 
+        private void DeviceRotated(object sender, PageOrientationEventArgs e)
+        {
+            switch (e.Orientation)
+            {
+                case PageOrientation.Horizontal:
 
+                    AbsoluteLayout.SetLayoutBounds(AppSettings, new Rectangle(0.5, 0.65, 300, AbsoluteLayout.AutoSize));
+
+                    break;
+
+                case PageOrientation.Vertical:
+
+                    AbsoluteLayout.SetLayoutBounds(AppSettings, new Rectangle(0.5, 0.85, 300, AbsoluteLayout.AutoSize));
+
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         protected override void OnAppearing()
@@ -167,10 +205,11 @@ namespace Xandar
                 return;
             }
 
-            if (_isPrivacyMode)
+            if (!_isPrivacyMode)
             {
                 var history = new History()
                 {
+                    Title = Page.TitlePage,
                     URL = e.Url,
                     Date = DateTime.Now.ToLongTimeString(),
                     Time = DateTime.Now.ToShortDateString()
@@ -179,15 +218,22 @@ namespace Xandar
                 await App.Database.SaveHistoryAsync(history);
             }
 
-            await App.Database.SavePagesAsync(new Xandar.Data.Page()
-            {
-                OriginalURL = e.Url
-            });
+            var sessionPage = new Data.Page();
+
+            sessionPage.ID = 1;
+            sessionPage.OriginalURL = e.Url;
+
+            await App.Database.SavePagesAsync(sessionPage);
         }
 
-        #endregion 
+        #endregion
 
         #region ActionBar
+
+        private void WillInProgress_Clicked(object sender, EventArgs e)
+        {
+            DependencyService.Get<IToast>().ShowLong("WIP...");
+        }
 
         private void GoToBeforePage_Clicked(object sender, EventArgs e)
         {
@@ -254,17 +300,34 @@ namespace Xandar
             }
         }
 
+        private async void OpenBookmarks_Clicked(object sender, EventArgs e)
+        {
+            CloseAllVisibleMenu();
+            var page = new BookmarkPage();
+            await Navigation.PushModalAsync(page);
+        }
+
         #endregion
 
         #region SettingsBar
 
         private async void OpenHistoryPage_Clicked(object sender, EventArgs e)
         {
-            BackgroundBlackTransparent.IsVisible = false;
-            AppSettings.IsVisible = false;
+            CloseAllVisibleMenu();
 
             var page = new HistoryPage();
             await Navigation.PushModalAsync(page);
+        }
+
+        private async void AddFavoritePage_Clicked(object sender, EventArgs e)
+        {
+            var bookmarks = new Bookmarks()
+            {
+                Title = Page.TitlePage,
+                URL = currentURL
+            };
+
+            await App.Database.SaveBookmarkAsync(bookmarks);
         }
 
         private void TurnModePrivacy_Clicked(object sender, EventArgs e)
@@ -272,15 +335,22 @@ namespace Xandar
             if(_isPrivacyMode)
             {
                 _isPrivacyMode = false;
+                BindingModel.PrivacyImagePath = "privacy_off.png";
             }
             else
             {
                 _isPrivacyMode = true;
+                BindingModel.PrivacyImagePath = "privacy_on.png";
             }
         }
 
         private void TurnModeMobileOrDesktop_Clicked(object sender, EventArgs e)
         {
+            if(Page.OriginalURL == null)
+            {
+                return;
+            }
+
             bool existMobile = currentURL.Contains(".m.");
 
             if (existMobile)
@@ -288,10 +358,12 @@ namespace Xandar
                 if (Page.IsMobileVersion)
                 {
                     Page.IsMobileVersion = false;
+                    BindingModel.FullscreenImagePath = "fullscreen_on.png";
                 }
                 else
                 {
                     Page.IsMobileVersion = true;
+                    BindingModel.FullscreenImagePath = "fullscreen_off.png";
                 }
 
                 Page.Source = Page.OriginalURL.Replace(".m", "");
@@ -301,10 +373,12 @@ namespace Xandar
                 if (Page.IsMobileVersion)
                 {
                     Page.IsMobileVersion = false;
+                    BindingModel.FullscreenImagePath = "fullscreen_on.png";
                 }
                 else
                 {
                     Page.IsMobileVersion = true;
+                    BindingModel.FullscreenImagePath = "fullscreen_off.png";
                 }
 
                 Page.Source = Page.OriginalURL;
@@ -355,5 +429,10 @@ namespace Xandar
             }
         }
 
+        private void CloseAllVisibleMenu()
+        {
+            BackgroundBlackTransparent.IsVisible = false;
+            AppSettings.IsVisible = false;
+        }
     }
 }

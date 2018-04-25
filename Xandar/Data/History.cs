@@ -11,6 +11,12 @@ namespace Xandar.Data
             set;
         }
 
+        public string Title
+        {
+            get;
+            set;
+        }
+
         public string URL
         {
             get;

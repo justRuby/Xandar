@@ -32,7 +32,7 @@ namespace Xandar.Data
 
         public Task<int> SaveBookmarkAsync(Bookmarks bookmarks)
         {
-            return database.UpdateAsync(bookmarks);
+            return database.InsertAsync(bookmarks);
         }
 
         public async void DeleteAllBookmarksAsync()
@@ -46,7 +46,7 @@ namespace Xandar.Data
             }
         }
 
-        public Task<int> DeleteAllBookmarksAsync(Bookmarks bookmarks)
+        public Task<int> DeleteBookmarkAsync(Bookmarks bookmarks)
         {
             return database.DeleteAsync(bookmarks);
         }
@@ -63,6 +63,8 @@ namespace Xandar.Data
         public Task<List<History>> GetHistoryAsyncSO(bool fisrtGet, int start, int offset)
         {
             var list = database.Table<History>().ToListAsync().Result;
+            list.Reverse();
+
             List<History> result = new List<History>();
 
             if(fisrtGet)
@@ -94,7 +96,7 @@ namespace Xandar.Data
                 }
             }
 
-            result.Reverse();
+            
 
             return Task.FromResult(result);
         }
@@ -131,7 +133,12 @@ namespace Xandar.Data
 
         public Task<int> SavePagesAsync(Page page)
         {
-            if(page.ID != 0)
+            var check = database.Table<Page>().ToListAsync().Result;
+
+            if (check.Count == 0)
+                return database.InsertAsync(page);
+
+            if (database.FindAsync<Page>(x => x.IDPage == page.IDPage) != null)
             {
                 return database.UpdateAsync(page);
             }

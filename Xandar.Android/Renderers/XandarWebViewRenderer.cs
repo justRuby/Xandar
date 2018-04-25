@@ -32,7 +32,7 @@ namespace Xandar.Droid.Renderers
                 return;
             }
 
-            if(!isDataTaken)
+            if (!isDataTaken)
             {
                 isDataTaken = true;
                 _zoom = Control.Settings.TextZoom;

@@ -2,21 +2,20 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-             x:Class="Xandar.View.HistoryPage"
-             BackgroundColor="White">
+             x:Class="Xandar.View.BookmarkPage">
     <ContentPage.Content>
         <StackLayout>
             <Frame HorizontalOptions="FillAndExpand"
                    HeightRequest="50"
                    Padding="0">
                 <AbsoluteLayout>
-                    <Label Text="История"
+                    <Label Text="Закладки"
                            FontAttributes="Bold"
                            FontSize="24"
                            AbsoluteLayout.LayoutBounds="0.2,0.3,AutoSize, 40"
                            AbsoluteLayout.LayoutFlags="PositionProportional"/>
 
-                    <ff:CachedImage CacheType="All"
+                    <!--<ff:CachedImage CacheType="All"
                                     Aspect="AspectFit"
                                     Source="search"
                                     x:Name="SearchIntoHistory"
@@ -28,15 +27,13 @@
                                     Source="settings2"
                                     x:Name="Settings"
                                     AbsoluteLayout.LayoutBounds="0.95,0.3,35,35"
-                                    AbsoluteLayout.LayoutFlags="PositionProportional"/>
+                                    AbsoluteLayout.LayoutFlags="PositionProportional"/>-->
                 </AbsoluteLayout>
             </Frame>
 
-            <ListView x:Name="ListViewHistory" 
+            <ListView x:Name="ListViewBookMarks" 
                       CachingStrategy="RecycleElement" 
-                      ItemTapped="ListViewHistory_ItemTapped"
-                      Refreshing="ListViewHistory_Refreshing"
-                      IsPullToRefreshEnabled="True"
+                      ItemTapped="ListViewBookMarks_ItemTapped"
                       HasUnevenRows="True">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -44,29 +41,28 @@
                             <ViewCell.View>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="80"/>
                                         <ColumnDefinition Width="200*"/>
-                                        <ColumnDefinition Width="100"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="80"/>
                                     </Grid.RowDefinitions>
 
-                                    <!--<ff:CachedImage Grid.Column="0"
+                                    <ff:CachedImage Grid.Column="0"
                                                     Grid.Row="0"
                                                     HeightRequest="30"
                                                     WidthRequest="30"
                                                     MinimumHeightRequest="20"
                                                     MinimumWidthRequest="20"
-                                                    Margin="10,10,0,10" 
+                                                    Margin="10,10,10,10" 
                                                     DownsampleToViewSize="True"
-                                                    Source="bookmarks.png"
+                                                    
                                                     CacheType="All"
                                                     IsOpaque="True"
-                                                    Aspect="AspectFit"/>-->
+                                                    Aspect="AspectFit"/>
 
-                                    <Grid Grid.Column="0"
+                                    <Grid Grid.Column="1"
                                           Grid.Row="0"
-                                          Margin="20,0"
                                           VerticalOptions="Center"
                                           HorizontalOptions="FillAndExpand">
 
@@ -95,42 +91,14 @@
 
                                     </Grid>
 
-                                    <Grid Grid.Column="1"
-                                          Grid.Row="0"
-                                          VerticalOptions="Center"
-                                          HorizontalOptions="EndAndExpand">
 
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="100"/>
-                                        </Grid.ColumnDefinitions>
-
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="25"/>
-                                            <RowDefinition Height="25"/>
-                                        </Grid.RowDefinitions>
-
-                                        <Label Grid.Column="0"
-                                               Grid.Row="0"
-                                               FontSize="Small"
-                                               TextColor="DimGray"
-                                               HorizontalTextAlignment="Center"
-                                               Text="{Binding Time}"/>
-
-                                        <Label Grid.Column="0"
-                                               Grid.Row="1"
-                                               FontSize="Small"
-                                               TextColor="Gray"
-                                               HorizontalTextAlignment="Center"
-                                               Text="{Binding Date}"/>
-
-                                    </Grid>
                                 </Grid>
                             </ViewCell.View>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            
+
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

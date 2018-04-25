@@ -17,7 +17,7 @@ namespace Xandar.Data
             set;
         }
 
-        public string Name
+        public string Title
         {
             get;
             set;

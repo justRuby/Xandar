@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:Xandar"
-             xmlns:xancontrols="clr-namespace:Xandar.CustomControl"
-             xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-             xmlns:ffTransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
-             xmlns:custom="clr-namespace:Xandar.CustomControl"
-             x:Class="Xandar.MainPage"
-             BackgroundColor="White">
+<custom:CustomContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+                         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                         xmlns:local="clr-namespace:Xandar"
+                         xmlns:xancontrols="clr-namespace:Xandar.CustomControl"
+                         xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+                         xmlns:ffTransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+                         xmlns:custom="clr-namespace:Xandar.CustomControl"
+                         x:Class="Xandar.MainPage"
+                         BackgroundColor="White">
 
     <AbsoluteLayout>
 
@@ -171,9 +171,17 @@
                     <AbsoluteLayout VerticalOptions="Fill"
                                     HorizontalOptions="Fill">
 
+                        <custom:CustomButton BackgroundColor="Transparent"
+                                             AbsoluteLayout.LayoutBounds="1,1,1,1"
+                                             AbsoluteLayout.LayoutFlags="All"
+                                             Clicked="WillInProgress_Clicked">
+                            
+                        </custom:CustomButton>
+                        
                         <ff:CachedImage Source="download.png"
                                         CacheType="All"
                                         Aspect="AspectFit"
+                                        InputTransparent="True"
                                         AbsoluteLayout.LayoutBounds="0.5,0.4,30,30"
                                         AbsoluteLayout.LayoutFlags="PositionProportional"/>
 
@@ -202,6 +210,13 @@
                     <AbsoluteLayout VerticalOptions="Fill"
                                     HorizontalOptions="Fill">
 
+                        <custom:CustomButton BackgroundColor="Transparent"
+                                             AbsoluteLayout.LayoutBounds="1,1,1,1"
+                                             AbsoluteLayout.LayoutFlags="All"
+                                             Clicked="OpenHistoryPage_Clicked">
+
+                        </custom:CustomButton>
+
                         <ff:CachedImage Source="history.png"
                                         CacheType="All"
                                         Aspect="AspectFit"
@@ -229,9 +244,17 @@
                     <AbsoluteLayout VerticalOptions="Fill"
                                     HorizontalOptions="Fill">
 
+                        <custom:CustomButton BackgroundColor="Transparent"
+                                             AbsoluteLayout.LayoutBounds="1,1,1,1"
+                                             AbsoluteLayout.LayoutFlags="All"
+                                             Clicked="WillInProgress_Clicked">
+
+                        </custom:CustomButton>
+
                         <ff:CachedImage Source="settings.png"
                                         CacheType="All"
                                         Aspect="AspectFit"
+                                        InputTransparent="True"
                                         AbsoluteLayout.LayoutBounds="0.5,0.4,25,25"
                                         AbsoluteLayout.LayoutFlags="PositionProportional"/>
 
@@ -255,9 +278,17 @@
                     <AbsoluteLayout VerticalOptions="Fill"
                                     HorizontalOptions="Fill">
 
+                        <custom:CustomButton BackgroundColor="Transparent"
+                                             AbsoluteLayout.LayoutBounds="1,1,1,1"
+                                             AbsoluteLayout.LayoutFlags="All"
+                                             Clicked="AddFavoritePage_Clicked">
+
+                        </custom:CustomButton>
+
                         <ff:CachedImage Source="favorite.png"
                                         CacheType="All"
                                         Aspect="AspectFit"
+                                        InputTransparent="True"
                                         AbsoluteLayout.LayoutBounds="0.5,0.4,25,25"
                                         AbsoluteLayout.LayoutFlags="PositionProportional"/>
 
@@ -289,16 +320,24 @@
                     <AbsoluteLayout VerticalOptions="Fill"
                                     HorizontalOptions="Fill">
 
-                        <ff:CachedImage BackgroundColor="LightGray"
+                        <custom:CustomButton BackgroundColor="Transparent"
+                                             AbsoluteLayout.LayoutBounds="1,1,1,1"
+                                             AbsoluteLayout.LayoutFlags="All"
+                                             Clicked="TurnModePrivacy_Clicked">
+
+                        </custom:CustomButton>
+
+                        <ff:CachedImage Source="{Binding PrivacyImagePath}"
                                         CacheType="All"
                                         Aspect="AspectFit"
+                                        InputTransparent="True"
                                         AbsoluteLayout.LayoutBounds="0.5,0.4,25,25"
                                         AbsoluteLayout.LayoutFlags="PositionProportional"/>
 
                         <Label Text="Приватность"
                                InputTransparent="True"
                                HorizontalTextAlignment="Center"
-                               AbsoluteLayout.LayoutBounds="0.5,1.3,50,20"
+                               AbsoluteLayout.LayoutBounds="0.5,1.2,50,20"
                                AbsoluteLayout.LayoutFlags="PositionProportional"
                                FontSize="Micro"/>
 
@@ -316,16 +355,24 @@
                     <AbsoluteLayout VerticalOptions="Fill"
                                     HorizontalOptions="Fill">
 
-                        <ff:CachedImage BackgroundColor="LightGray"
+                        <custom:CustomButton BackgroundColor="Transparent"
+                                             AbsoluteLayout.LayoutBounds="1,1,1,1"
+                                             AbsoluteLayout.LayoutFlags="All"
+                                             Clicked="TurnModeMobileOrDesktop_Clicked">
+
+                        </custom:CustomButton>
+
+                        <ff:CachedImage Source="{Binding FullscreenImagePath}"
                                         CacheType="All"
                                         Aspect="AspectFit"
+                                        InputTransparent="True"
                                         AbsoluteLayout.LayoutBounds="0.5,0.4,25,25"
                                         AbsoluteLayout.LayoutFlags="PositionProportional"/>
 
                         <Label Text="Полн. режим"
                                InputTransparent="True"
                                HorizontalTextAlignment="Center"
-                               AbsoluteLayout.LayoutBounds="0.5,1.3,50,20"
+                               AbsoluteLayout.LayoutBounds="0.5,1.2,50,20"
                                AbsoluteLayout.LayoutFlags="PositionProportional"
                                FontSize="Micro"/>
 
@@ -347,7 +394,7 @@
                AbsoluteLayout.LayoutBounds="1, 1, 1, 50"
                AbsoluteLayout.LayoutFlags="PositionProportional, WidthProportional">
 
-            <Grid HorizontalOptions="FillAndExpand">
+            <Grid HorizontalOptions="CenterAndExpand">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
@@ -447,7 +494,7 @@
                            Padding="12"
                            HasShadow="False">
 
-                        <ff:CachedImage x:Name="OpenBookmarksButton"
+                        <ff:CachedImage x:Name="OpenBookmarks"
                                         Aspect="AspectFit"
                                         CacheType="All"
                                         Source="bookmarks.png"/>
@@ -462,4 +509,4 @@
 
     </AbsoluteLayout>
 
-</ContentPage>
+</custom:CustomContentPage>
