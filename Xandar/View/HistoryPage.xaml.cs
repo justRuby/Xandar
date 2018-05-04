@@ -27,7 +27,25 @@ namespace Xandar.View
 		public HistoryPage()
 		{
 			InitializeComponent ();
-		}
+
+            TapGestureRecognizer tapSettings = new TapGestureRecognizer();
+            tapSettings.Tapped += TapSettings_Tapped;
+            Settings.GestureRecognizers.Add(tapSettings);
+        }
+
+        private void TapSettings_Tapped(object sender, EventArgs e)
+        {
+            HistorySettingsTableView.IsVisible = true;
+        }
+
+        private async void DeleteAllHistory_Clicked(object sender, EventArgs e)
+        {
+            await App.Database.DeleteAllHistoryAsync();
+            RefreshingList();
+
+            if (HistorySettingsTableView.IsVisible == true)
+                HistorySettingsTableView.IsVisible = false;
+        }
 
         protected override void OnAppearing()
         {
@@ -39,6 +57,9 @@ namespace Xandar.View
 
         private async void ListViewHistory_ItemTapped(object sender, ItemTappedEventArgs e)
         {
+            if(HistorySettingsTableView.IsVisible == true)
+                HistorySettingsTableView.IsVisible = false;
+
             var input = await DisplayActionSheet("", "Отмена", "", "Открыть", "Удалить");
 
             if(input.Equals("Открыть"))
@@ -57,6 +78,9 @@ namespace Xandar.View
 
         private void ListViewHistory_Refreshing(object sender, EventArgs e)
         {
+            if (HistorySettingsTableView.IsVisible == true)
+                HistorySettingsTableView.IsVisible = false;
+
             RefreshingList();
             ListViewHistory.EndRefresh();
         }

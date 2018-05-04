@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-             x:Class="Xandar.View.BookmarkPage">
+             x:Class="Xandar.View.BookmarkPage"
+             BackgroundColor="White">
     <ContentPage.Content>
         <StackLayout>
             <Frame HorizontalOptions="FillAndExpand"
@@ -39,58 +40,34 @@
                     <DataTemplate>
                         <ViewCell>
                             <ViewCell.View>
-                                <Grid>
+                                <Grid Grid.Column="1"
+                                      Grid.Row="0"
+                                      VerticalOptions="Center"
+                                      Margin="10,0"
+                                      HorizontalOptions="FillAndExpand">
+
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="80"/>
                                         <ColumnDefinition Width="200*"/>
                                     </Grid.ColumnDefinitions>
+
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="80"/>
+                                        <RowDefinition Height="25"/>
+                                        <RowDefinition Height="25"/>
                                     </Grid.RowDefinitions>
 
-                                    <ff:CachedImage Grid.Column="0"
-                                                    Grid.Row="0"
-                                                    HeightRequest="30"
-                                                    WidthRequest="30"
-                                                    MinimumHeightRequest="20"
-                                                    MinimumWidthRequest="20"
-                                                    Margin="10,10,10,10" 
-                                                    DownsampleToViewSize="True"
-                                                    
-                                                    CacheType="All"
-                                                    IsOpaque="True"
-                                                    Aspect="AspectFit"/>
-
-                                    <Grid Grid.Column="1"
-                                          Grid.Row="0"
-                                          VerticalOptions="Center"
-                                          HorizontalOptions="FillAndExpand">
-
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="200*"/>
-                                        </Grid.ColumnDefinitions>
-
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="25"/>
-                                            <RowDefinition Height="25"/>
-                                        </Grid.RowDefinitions>
-
-                                        <Label Grid.Column="0"
+                                    <Label Grid.Column="0"
                                                Grid.Row="0"
                                                FontSize="Medium"
                                                TextColor="DimGray"
                                                LineBreakMode="TailTruncation"
                                                Text="{Binding Title}"/>
 
-                                        <Label Grid.Column="0"
+                                    <Label Grid.Column="0"
                                                Grid.Row="1"
                                                FontSize="Small"
                                                TextColor="Gray"
                                                LineBreakMode="TailTruncation"
                                                Text="{Binding URL}"/>
-
-                                    </Grid>
-
 
                                 </Grid>
                             </ViewCell.View>

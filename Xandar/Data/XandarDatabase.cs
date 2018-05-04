@@ -106,11 +106,11 @@ namespace Xandar.Data
             return database.InsertAsync(history);
         }
 
-        public async void DeleteAllHistoryAsync()
+        public async Task DeleteAllHistoryAsync()
         {
             var count = await database.Table<History>().CountAsync();
 
-            for (int i = 0; i < count - 1; i++)
+            for (int i = count - 1; i >= 0; --i)
             {
                 var element = await database.Table<History>().ElementAtAsync(i);
                 await database.DeleteAsync(element);
